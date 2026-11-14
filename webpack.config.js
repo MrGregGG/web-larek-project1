@@ -6,9 +6,13 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const { DefinePlugin } = require('webpack');
 const TerserPlugin = require("terser-webpack-plugin");
 
-require('dotenv').config({
-  path: path.join(process.cwd(), process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env')
-});
+// Environment-specific values take precedence; .env remains the shared fallback.
+if (process.env.NODE_ENV) {
+  require('dotenv').config({
+    path: path.join(__dirname, `.env.${process.env.NODE_ENV}`)
+  });
+}
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const isProduction = process.env.NODE_ENV == "production";
 
